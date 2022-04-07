@@ -25,7 +25,7 @@ import { useAddBank, useBank } from '@/hooks/useBank'
 const Home: NextPage = () => {
     const { pathname } = useRouter()
 
-    const bankList = useBank()
+    const allBanksList = useBank()
     const addBanks = useAddBank()
 
     // table usestates
@@ -42,7 +42,7 @@ const Home: NextPage = () => {
 
     const lastBankIndex = currentPage * Number(postsPerPage.value)
     const firstBankIndex = lastBankIndex - Number(postsPerPage.value)
-    const defaultTableData = bankList.slice(firstBankIndex, lastBankIndex)
+    const defaultTableData = allBanksList.slice(firstBankIndex, lastBankIndex)
 
     // Change Page
     function paginate(pageNumber: number) {
@@ -53,6 +53,7 @@ const Home: NextPage = () => {
     function handleDropdown(data: DropdownData, type: string) {
         if (type.toLowerCase() === 'city') {
             setCities(data)
+            setCurrentPage(1)
         } else if (type.toLowerCase() === 'rows') {
             setPostsPerPage(data)
         } else {
@@ -66,7 +67,7 @@ const Home: NextPage = () => {
 
     useEffect(() => {
         setTableData(defaultTableData)
-    }, [bankList, postsPerPage])
+    }, [allBanksList, postsPerPage])
 
     return (
         <>
@@ -96,6 +97,9 @@ const Home: NextPage = () => {
                                     onChange={(e) =>
                                         handleSearch(
                                             e,
+                                            firstBankIndex,
+                                            lastBankIndex,
+                                            allBanksList,
                                             defaultTableData,
                                             setTableData,
                                             category.value
@@ -110,7 +114,7 @@ const Home: NextPage = () => {
                         <div className="flex items-center my-8">
                             <div className="mr-6">
                                 <Pagination
-                                    totalBanks={bankList.length}
+                                    totalBanks={allBanksList.length}
                                     currentPage={currentPage}
                                     setCurrentPage={paginate}
                                     firstIndex={firstBankIndex}
