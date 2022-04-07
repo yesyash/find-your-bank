@@ -1,4 +1,5 @@
 import { useAddBank, useBank } from '@/hooks/useBank'
+import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { ArrowLeft } from 'react-feather'
@@ -12,7 +13,7 @@ const Detail = ({ heading, value }: { heading: string; value: string }) => {
     )
 }
 
-const Bank = () => {
+const Bank: NextPage = () => {
     const router = useRouter()
 
     const bankList = useBank()
