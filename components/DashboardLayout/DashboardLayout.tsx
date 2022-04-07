@@ -69,7 +69,7 @@ const DashboardLayout: React.FC<Props> = ({
 
     useEffect(() => {
         setTableData(defaultTableData)
-    }, [allBanksList, postsPerPage, defaultTableData])
+    }, [allBanksList, postsPerPage])
 
     return (
         <>
