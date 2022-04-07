@@ -21,6 +21,8 @@ import { handleSearch, loadBankList } from './Home.helpers'
 
 // hooks
 import { useAddBank, useBank } from '@/hooks/useBank'
+import Loading from '@/components/Loading'
+import EmptyState from '@/components/EmptyState'
 
 const Home: NextPage = () => {
     const { pathname } = useRouter()
@@ -150,7 +152,13 @@ const Home: NextPage = () => {
                             </div>
                         </div>
 
-                        {loading ? 'Loading....' : <Table data={tableData} />}
+                        {tableData.length === 0 ? (
+                            <EmptyState />
+                        ) : loading ? (
+                            <Loading />
+                        ) : (
+                            <Table data={tableData} />
+                        )}
                     </div>
                 </section>
             </main>
