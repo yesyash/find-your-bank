@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import { Search } from 'react-feather'
 
 // constants
 import { cities, categories, rows } from './Home.constants'
@@ -9,37 +10,39 @@ import { cities, categories, rows } from './Home.constants'
 import Sidebar from '@/components/Sidebar'
 import Table from '@/components/Table'
 import Dropdown from '@/components/Dropdown'
+import Pagination from '@/components/Pagination'
 
 // types
 import { DropdownData } from '@/types/dropdown'
+import { Bank } from '@/types/bank'
 
 // helper functions
-import { loadBankList } from './Home.helpers'
-import { Search } from 'react-feather'
-import Pagination from '@/components/Pagination'
+import { handleSearch, loadBankList } from './Home.helpers'
+
+// hooks
 import { useAddBank, useBank } from '@/hooks/useBank'
 
 const Home: NextPage = () => {
     const { pathname } = useRouter()
+
     const bankList = useBank()
     const addBanks = useAddBank()
 
+    // table usestates
     const [loading, setLoading] = useState(false)
+    const [tableData, setTableData] = useState<Bank[]>([])
+
+    // dropdown usestates
     const [city, setCities] = useState(cities[0])
     const [category, setCategory] = useState(categories[0])
 
+    // for pagination
     const [currentPage, setCurrentPage] = useState(1)
     const [postsPerPage, setPostsPerPage] = useState(rows[0])
 
-    const indexOfLastBank = currentPage * Number(postsPerPage.value)
-    const indexOfFirstBank = indexOfLastBank - Number(postsPerPage.value)
-    const defaultCurrentBankList = bankList.slice(
-        indexOfFirstBank,
-        indexOfLastBank
-    )
-    const [currentBankList, setCurrentBankList] = useState(
-        defaultCurrentBankList
-    )
+    const lastBankIndex = currentPage * Number(postsPerPage.value)
+    const firstBankIndex = lastBankIndex - Number(postsPerPage.value)
+    const defaultTableData = bankList.slice(firstBankIndex, lastBankIndex)
 
     // Change Page
     function paginate(pageNumber: number) {
@@ -61,28 +64,9 @@ const Home: NextPage = () => {
         loadBankList(city.value, setLoading, addBanks)
     }, [city, addBanks])
 
-    function handleSearch(e: { target: { value: string } }) {
-        let value = String(e.target.value)
-
-        if (value === '') {
-            setCurrentBankList(defaultCurrentBankList)
-            return
-        }
-
-        switch (category.value) {
-            case categories[0].value:
-                setCurrentBankList(
-                    currentBankList.filter((bank) =>
-                        bank.bank_name.toLowerCase().includes(value)
-                    )
-                )
-
-                return
-
-            default:
-                return
-        }
-    }
+    useEffect(() => {
+        setTableData(defaultTableData)
+    }, [bankList, postsPerPage])
 
     return (
         <>
@@ -95,7 +79,7 @@ const Home: NextPage = () => {
                             {pathname === '/' ? 'All Banks' : 'Favorites'}
                         </h2>
 
-                        <form className="transition">
+                        <div>
                             <div className="flex items-center px-4 overflow-hidden border rounded-full border-neutral-400 group focus-within:border-blue-600">
                                 <Search
                                     width={18}
@@ -109,10 +93,17 @@ const Home: NextPage = () => {
                                     id=""
                                     placeholder="Search"
                                     className="h-10 px-4 transition-all duration-300 ease-in-out w-60 focus:w-72"
-                                    onChange={(e) => handleSearch(e)}
+                                    onChange={(e) =>
+                                        handleSearch(
+                                            e,
+                                            defaultTableData,
+                                            setTableData,
+                                            category.value
+                                        )
+                                    }
                                 />
                             </div>
-                        </form>
+                        </div>
                     </div>
 
                     <div>
@@ -122,8 +113,8 @@ const Home: NextPage = () => {
                                     totalBanks={bankList.length}
                                     currentPage={currentPage}
                                     setCurrentPage={paginate}
-                                    firstIndex={indexOfFirstBank}
-                                    lastIndex={indexOfLastBank}
+                                    firstIndex={firstBankIndex}
+                                    lastIndex={lastBankIndex}
                                 />
                             </div>
 
@@ -155,11 +146,7 @@ const Home: NextPage = () => {
                             </div>
                         </div>
 
-                        {loading ? (
-                            'Loading....'
-                        ) : (
-                            <Table data={currentBankList} />
-                        )}
+                        {loading ? 'Loading....' : <Table data={tableData} />}
                     </div>
                 </section>
             </main>
