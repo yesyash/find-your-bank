@@ -40,10 +40,7 @@ const Table: React.FC<Props> = ({ data }) => {
             </thead>
             <tbody>
                 {data.map((bank) => (
-                    <tr
-                        key={bank.bank_id}
-                        className="border-b border-neutral-200"
-                    >
+                    <tr key={bank.ifsc} className="border-b border-neutral-200">
                         <td className="px-2 py-2 lowercase first-letter:capitalize">
                             <button className="p-1">
                                 <Heart

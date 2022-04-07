@@ -31,10 +31,15 @@ const Home: NextPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [postsPerPage, setPostsPerPage] = useState(rows[0])
 
-    // Get Bounded bank list
     const indexOfLastBank = currentPage * Number(postsPerPage.value)
     const indexOfFirstBank = indexOfLastBank - Number(postsPerPage.value)
-    const currentBankList = bankList.slice(indexOfFirstBank, indexOfLastBank)
+    const defaultCurrentBankList = bankList.slice(
+        indexOfFirstBank,
+        indexOfLastBank
+    )
+    const [currentBankList, setCurrentBankList] = useState(
+        defaultCurrentBankList
+    )
 
     // Change Page
     function paginate(pageNumber: number) {
@@ -55,6 +60,29 @@ const Home: NextPage = () => {
     useEffect(() => {
         loadBankList(city.value, setLoading, addBanks)
     }, [city, addBanks])
+
+    function handleSearch(e: { target: { value: string } }) {
+        let value = String(e.target.value)
+
+        if (value === '') {
+            setCurrentBankList(defaultCurrentBankList)
+            return
+        }
+
+        switch (category.value) {
+            case categories[0].value:
+                setCurrentBankList(
+                    currentBankList.filter((bank) =>
+                        bank.bank_name.toLowerCase().includes(value)
+                    )
+                )
+
+                return
+
+            default:
+                return
+        }
+    }
 
     return (
         <>
@@ -81,6 +109,7 @@ const Home: NextPage = () => {
                                     id=""
                                     placeholder="Search"
                                     className="h-10 px-4 transition-all duration-300 ease-in-out w-60 focus:w-72"
+                                    onChange={(e) => handleSearch(e)}
                                 />
                             </div>
                         </form>
