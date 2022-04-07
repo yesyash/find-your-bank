@@ -1,30 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { NextPage } from 'next'
 
 // constants
 import { cities } from '@/constants'
 
-// helper functions
-import { loadBankList } from './Home.helpers'
-
 // hooks
-import { useAddBank, useBank } from '@/hooks/useBank'
+import { useBank } from '@/hooks/useBank'
 
 import DashboardLayout from '@/components/DashboardLayout'
 
-const Home: NextPage = () => {
-    const allBanksList = useBank()
-    const addBanks = useAddBank()
+const Favorites: NextPage = () => {
+    const allBanksList = useBank().filter((bank) => bank.favorite === true)
 
     // table usestates
     const [loading, setLoading] = useState(false)
 
     // dropdown usestates
     const [city, setCity] = useState(cities[0])
-
-    useEffect(() => {
-        loadBankList(city.value, setLoading, addBanks)
-    }, [city, addBanks])
 
     return (
         <>
@@ -39,4 +31,4 @@ const Home: NextPage = () => {
     )
 }
 
-export default Home
+export default Favorites

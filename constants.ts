@@ -13,7 +13,7 @@ export const categories = [
     { id: 4, value: 'Branch', unavailable: false },
 ]
 
-export const rows = [
+export const postsCount = [
     { id: 1, value: '5', unavailable: false },
     { id: 2, value: '10', unavailable: false },
     { id: 3, value: '15', unavailable: false },

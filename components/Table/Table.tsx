@@ -1,3 +1,4 @@
+import { useUpdateBank } from '@/hooks/useBank'
 import { Bank } from '@/types/bank'
 import { Heart } from 'react-feather'
 import Hyperlink from '../Hyperlink'
@@ -7,6 +8,8 @@ interface Props {
 }
 
 const Table: React.FC<Props> = ({ data }) => {
+    const updateBank = useUpdateBank()
+
     return (
         <table className="w-full overflow-hidden text-sm border-collapse table-fixed">
             <thead className="text-left border-y bg-neutral-100 border-neutral-200">
@@ -42,12 +45,24 @@ const Table: React.FC<Props> = ({ data }) => {
                 {data.map((bank) => (
                     <tr key={bank.ifsc} className="border-b border-neutral-200">
                         <td className="px-2 py-2 lowercase first-letter:capitalize">
-                            <button className="p-1">
+                            <button
+                                className="p-1"
+                                onClick={() =>
+                                    updateBank(
+                                        bank.ifsc,
+                                        bank.city.toLowerCase()
+                                    )
+                                }
+                            >
                                 <Heart
                                     width={18}
                                     height={18}
                                     strokeWidth={1.5}
-                                    className="fill-white stroke-neutral-400 hover:stroke-red-500"
+                                    className={
+                                        bank.favorite
+                                            ? 'fill-red-500 stroke-red-500'
+                                            : 'fill-white stroke-neutral-400 hover:stroke-red-500'
+                                    }
                                 />
                             </button>
                         </td>
