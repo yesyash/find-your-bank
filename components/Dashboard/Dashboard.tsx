@@ -14,6 +14,7 @@ import Dropdown from '../Dropdown'
 import { DropdownData } from '@/types/dropdown'
 import { Search } from 'react-feather'
 import { handleSearch } from './Dashboard.helpers'
+import { useDebounce } from '@/hooks/useDebounce'
 
 const Dashboard = () => {
     const banks = useBank() // can be allowed to be passed by the parent prop
@@ -41,6 +42,18 @@ const Dashboard = () => {
         }
     }, [data])
 
+    const debouncedSearch = useDebounce(
+        (e) =>
+            handleSearch(
+                e,
+                state.category.value,
+                state.indexes,
+                banks,
+                updateTable
+            ),
+        500
+    )
+
     return (
         <main>
             <Sidebar />
@@ -63,15 +76,7 @@ const Dashboard = () => {
                                 id=""
                                 placeholder="Search"
                                 className="h-10 px-4 transition-all duration-300 ease-in-out w-60 focus:w-72"
-                                onChange={(e) =>
-                                    handleSearch(
-                                        e,
-                                        state.category.value,
-                                        state.indexes,
-                                        banks,
-                                        updateTable
-                                    )
-                                }
+                                onChange={debouncedSearch}
                             />
                         </div>
                     </div>

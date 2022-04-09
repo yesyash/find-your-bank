@@ -1,5 +1,6 @@
 import { useBank } from '@/hooks/useBank'
 import { NextPage } from 'next'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { ArrowLeft } from 'react-feather'
@@ -21,24 +22,19 @@ const Bank: NextPage = () => {
         (bank) => bank.ifsc === router.query?.ifsc
     )[0]
 
-    function pushBack() {
-        router.push('/')
-    }
-
     return (
         <>
             <main className="px-32 py-16">
-                <button
-                    className="flex items-center pb-8 mb-8 group text-neutral-600 hover:text-neutral-900"
-                    onClick={pushBack}
-                >
-                    <ArrowLeft
-                        width={20}
-                        height={20}
-                        className="transition duration-300 group-hover:-translate-x-1"
-                    />
-                    <span className="ml-2 ">Back</span>
-                </button>
+                <Link href="/all-banks">
+                    <a className="flex items-center pb-8 mb-8 group text-neutral-600 hover:text-neutral-900">
+                        <ArrowLeft
+                            width={20}
+                            height={20}
+                            className="transition duration-300 group-hover:-translate-x-1"
+                        />
+                        <span className="ml-2 ">Back</span>
+                    </a>
+                </Link>
 
                 <div>
                     <h1 className="mb-3 text-2xl font-bold lowercase first-letter:capitalize">
