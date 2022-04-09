@@ -1,4 +1,4 @@
-import { useUpdateBank } from '@/hooks/useBank'
+import { useToggleFavorite } from '@/hooks/useFavorite'
 import { Bank } from '@/types/bank'
 import { Heart } from 'react-feather'
 import Hyperlink from '../Hyperlink'
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Table: React.FC<Props> = ({ data }) => {
-    const updateBank = useUpdateBank()
+    const toggleFavorite = useToggleFavorite()
 
     return (
         <table className="w-full overflow-hidden text-sm border-collapse table-fixed">
@@ -47,12 +47,7 @@ const Table: React.FC<Props> = ({ data }) => {
                         <td className="px-2 py-2 lowercase first-letter:capitalize">
                             <button
                                 className="p-1"
-                                onClick={() =>
-                                    updateBank(
-                                        bank.ifsc,
-                                        bank.city.toLowerCase()
-                                    )
-                                }
+                                onClick={() => toggleFavorite(bank.ifsc)}
                             >
                                 <Heart
                                     width={18}

@@ -1,7 +1,6 @@
 import { LocalItem } from '@/types/localItem'
 
 type LocalData = Omit<LocalItem, 'key'>
-type Result = LocalData | null
 
 /**
  * Checks if a item is existing in the localstate and is not expired.
@@ -9,7 +8,7 @@ type Result = LocalData | null
  * @param key : string
  * @returns parsedData | null
  */
-export const getLocalItem = (key: LocalItem['key']): Result => {
+export const getLocalItem = (key: LocalItem['key']): LocalData | null => {
     let data = localStorage.getItem(key)
 
     if (data) {

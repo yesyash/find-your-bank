@@ -23,7 +23,7 @@ const Sidebar: React.FC = () => {
                         href={route.path}
                         currentPath={pathname}
                     >
-                        {route.path === '/' ? (
+                        {route.path === '/all-banks' ? (
                             <Home {...SvgStyles} />
                         ) : (
                             <Heart {...SvgStyles} />

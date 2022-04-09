@@ -1,7 +1,7 @@
 import { SVGAttributes } from 'react'
 
 export const SidebarRoutes = [
-    { path: '/', name: 'All Banks' },
+    { path: '/all-banks', name: 'All Banks' },
     { path: '/favorites', name: 'Favorites' },
 ]
 

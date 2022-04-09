@@ -21,7 +21,10 @@ export const GlobalContext = createContext<UseGlobalManagerResult>({
 function globalReducer(state: State, action: Action) {
     switch (action.type) {
         case 'AddBanks':
-            return { banks: action.banks }
+            return {
+                ...state,
+                banks: action.banks,
+            }
 
         case 'ToggleFavorite':
             return {

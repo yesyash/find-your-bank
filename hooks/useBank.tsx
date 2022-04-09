@@ -1,110 +1,40 @@
-// import React, {
-//     createContext,
-//     useCallback,
-//     useContext,
-//     useReducer,
-// } from 'react'
-// import { Bank } from '@/types/bank'
+import useSWR from 'swr'
+import React from 'react'
 
-// type Action =
-//     | { type: 'ADD'; data: Array<Bank> }
-//     | { type: 'UPDATE'; city: string; ifsc: string }
-// type UseBankManagerResult = ReturnType<typeof useBankManager>
-
-// const BankContext = createContext<UseBankManagerResult>({
-//     bankList: [],
-//     addBanks: () => {},
-//     updateBank: () => {},
-// })
-
-// function bankReducer(state: Bank[], action: Action) {
-//     switch (action.type) {
-//         case 'ADD':
-//             return action.data
-//         case 'UPDATE':
-//             let localData = localStorage.getItem(action.city)
-
-//             if (localData !== undefined && localData !== null) {
-//                 let copy: Bank[] = JSON.parse(localData)
-//                 let index = copy.findIndex((bank) => bank.ifsc === action.ifsc)
-
-//                 if (index >= 0) {
-//                     copy[index].favorite = true
-//                 }
-
-//                 return copy
-//             } else {
-//                 let copy = [...state]
-//                 let index = copy.findIndex((bank) => bank.ifsc === action.ifsc)
-//                 if (index >= 0) {
-//                     copy[index].favorite = true
-//                 }
-
-//                 return copy
-//             }
-//         default:
-//             throw new Error()
-//     }
-// }
-
-// function useBankManager(initialList: Bank[]): {
-//     bankList: Bank[]
-//     addBanks: (data: Bank[]) => void
-//     updateBank: (ifsc: string, city: string) => void
-// } {
-//     const [bankList, dispatch] = useReducer(bankReducer, initialList)
-
-//     const addBanks = useCallback((data: Bank[]) => {
-//         dispatch({ type: 'ADD', data: data })
-//     }, [])
-
-//     const updateBank = useCallback((ifsc: string, city: string) => {
-//         dispatch({ type: 'UPDATE', ifsc: ifsc, city: city })
-//     }, [])
-
-//     return { bankList, addBanks, updateBank }
-// }
-
-// export const BankProvider: React.FC<{
-//     initialList: Bank[]
-//     children: React.ReactNode
-// }> = ({ initialList, children }) => (
-//     <BankContext.Provider value={useBankManager(initialList)}>
-//         {children}
-//     </BankContext.Provider>
-// )
-
-// export const useBank = (): Bank[] => {
-//     const { bankList } = useContext(BankContext)
-
-//     return bankList
-// }
-
-// export const useAddBank = (): UseBankManagerResult['addBanks'] => {
-//     const { addBanks } = useContext(BankContext)
-
-//     return addBanks
-// }
-
-// export const useUpdateBank = (): UseBankManagerResult['updateBank'] => {
-//     const { updateBank } = useContext(BankContext)
-
-//     return updateBank
-// }
+import { Bank } from '@/types/bank'
 
 import { GlobalContext, UseGlobalManagerResult } from '@/context/global.context'
-import { Bank } from '@/types/bank'
-import { useContext } from 'react'
+import { fetcher } from '@/helpers/fetcher'
+
+interface GetBanksRes {
+    data: Omit<Bank[], 'favorite'>
+    isLoading: boolean
+    error: any
+}
 
 export const useBank = (): Bank[] => {
-    const {
-        state: { banks },
-    } = useContext(GlobalContext)
+    const { state } = React.useContext(GlobalContext)
 
-    return banks
+    return state.banks
 }
 
 export const useAddBanks = (): UseGlobalManagerResult['addBanks'] => {
-    const { addBanks } = useContext(GlobalContext)
+    const { addBanks } = React.useContext(GlobalContext)
     return addBanks
+}
+
+export const useGetBanks = (city: string): GetBanksRes => {
+    const { data, error } = useSWR(
+        `https://vast-shore-74260.herokuapp.com/banks?city=${city.toUpperCase()}`,
+        fetcher,
+        { fallbackData: [] }
+    )
+
+    let res: GetBanksRes['data'] = data
+
+    return {
+        data: res,
+        isLoading: res.length === 0 && !error,
+        error: error,
+    }
 }

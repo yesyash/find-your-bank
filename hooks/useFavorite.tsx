@@ -5,11 +5,9 @@ import { GlobalContext, UseGlobalManagerResult } from '@/context/global.context'
 import { Bank } from '@/types/bank'
 
 export const useFavorite = (): Bank[] => {
-    const {
-        state: { banks },
-    } = useContext(GlobalContext)
-    let favorites = banks.filter((bank) => bank.favorite === true)
+    const { state } = useContext(GlobalContext)
 
+    let favorites = state.banks.filter((bank) => bank.favorite === true)
     return favorites
 }
 

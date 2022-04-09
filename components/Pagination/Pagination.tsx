@@ -1,24 +1,27 @@
+import { postsCount } from '@/constants'
+import { Bank } from '@/types/bank'
+import { DropdownData } from '@/types/dropdown'
 import React from 'react'
 import { ChevronLeft, ChevronRight } from 'react-feather'
+import Dropdown from '../Dropdown'
+
 import { PaginateButton } from './Pagination.subchild'
 
 interface Props {
-    totalBanks: number
-    firstIndex: number
-    lastIndex: number
-    currentPage: number
-    setCurrentPage: (pageNumber: number) => void
+    allBanks: Bank[]
+    updateTableData: (banks: Bank[]) => void
 }
 
-const Pagination: React.FC<Props> = ({
-    totalBanks,
-    firstIndex,
-    lastIndex,
-    currentPage,
-    setCurrentPage,
-}) => {
-    const StartingIndex = firstIndex === 0 ? 1 : firstIndex
-    const endingIndex = lastIndex > totalBanks ? totalBanks : lastIndex
+const Pagination: React.FC<Props> = ({ allBanks, updateTableData }) => {
+    const [currentPage, setCurrentPage] = React.useState(1)
+    const [postsPerPage, setPostsPerPage] = React.useState(postsCount[0])
+
+    const lastBankIndex = currentPage * Number(postsPerPage.value)
+    const firstBankIndex = lastBankIndex - Number(postsPerPage.value)
+
+    const StartingIndex = firstBankIndex === 0 ? 1 : firstBankIndex
+    const endingIndex =
+        lastBankIndex > allBanks.length ? allBanks.length : lastBankIndex
 
     function prevPage() {
         if (currentPage === 1) {
@@ -29,27 +32,46 @@ const Pagination: React.FC<Props> = ({
     }
 
     function nextPage() {
-        if (lastIndex >= totalBanks) {
+        if (lastBankIndex >= allBanks.length) {
             return
         }
 
         setCurrentPage(currentPage + 1)
     }
 
+    function handleDropdown(data: DropdownData) {
+        setPostsPerPage(data)
+    }
+
+    React.useEffect(() => {
+        updateTableData(allBanks.slice(firstBankIndex, lastBankIndex))
+    }, [postsPerPage, allBanks, currentPage])
+
     return (
         <div className="flex items-center">
-            <PaginateButton onClick={prevPage} disabled={currentPage === 1}>
-                <ChevronLeft />
-            </PaginateButton>
+            <div className="flex items-center mr-6">
+                <PaginateButton onClick={prevPage} disabled={currentPage === 1}>
+                    <ChevronLeft />
+                </PaginateButton>
 
-            <span>{`${StartingIndex} / ${endingIndex} of ${totalBanks}`}</span>
+                <span>{`${StartingIndex} / ${endingIndex} of ${allBanks.length}`}</span>
 
-            <PaginateButton
-                onClick={nextPage}
-                disabled={lastIndex >= totalBanks}
-            >
-                <ChevronRight />
-            </PaginateButton>
+                <PaginateButton
+                    onClick={nextPage}
+                    disabled={lastBankIndex >= allBanks.length}
+                >
+                    <ChevronRight />
+                </PaginateButton>
+            </div>
+
+            <div>
+                <Dropdown
+                    label="Rows"
+                    data={postsCount}
+                    selected={postsPerPage}
+                    handleSelection={handleDropdown}
+                />
+            </div>
         </div>
     )
 }
