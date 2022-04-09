@@ -4,6 +4,8 @@ import useSWR from 'swr'
 import { useAddBanks, useBank } from '@/hooks/useBank'
 import { useFavorite, useToggleFavorite } from '@/hooks/useFavorite'
 import { Bank } from '@/types/bank'
+import { setLocalItem } from '@/helpers/setLocalItem'
+import { getLocalItem } from '@/helpers/getLocalItem'
 
 const AllBanks = () => {
     const banks = useBank()
@@ -32,14 +34,18 @@ const AllBanks = () => {
             let finalData = data.map((item) => ({ ...item, favorite: false }))
 
             addBanks(finalData)
+
+            let status = setLocalItem({ key: 'banglore', value: finalData })
+            console.log(status)
         }
     }
 
     function addFavorite(ifsc: string) {
         toggleFavorite(ifsc)
-    }
 
-    console.log(banks)
+        let data = getLocalItem('banglore')
+        console.log(data)
+    }
 
     return (
         <div className="m-16">
