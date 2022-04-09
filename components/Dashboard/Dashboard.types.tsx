@@ -5,4 +5,5 @@ export interface DashboardState {
     tableData: Bank[]
     city: typeof cities[0]
     category: typeof categories[0]
+    indexes: { start: number; end: number }
 }

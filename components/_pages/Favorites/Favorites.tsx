@@ -1,25 +1,23 @@
-import { useState } from 'react'
 import { NextPage } from 'next'
 
 // constants
-import { cities } from '@/constants'
+// import { cities } from '@/constants'
 
 // hooks
-import { useBank } from '@/hooks/useBank'
+// import { useBank } from '@/hooks/useBank'
 
-import DashboardLayout from '@/components/DashboardLayout'
-import Dashboard from '@/components/Dashboard'
-import { useFavorite } from '@/hooks/useFavorite'
+// import DashboardLayout from '@/components/DashboardLayout'
+// import Dashboard from '@/components/Dashboard'
+// import { useFavorite } from '@/hooks/useFavorite'
 
 const Favorites: NextPage = () => {
-    const allBanksList = useBank().filter((bank) => bank.favorite === true)
-    const favorites = useFavorite()
+    // const favorites = useFavorite()
 
     // table usestates
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
 
     // dropdown usestates
-    const [city, setCity] = useState(cities[0])
+    // const [city, setCity] = useState(cities[0])
 
     return (
         <>
@@ -30,7 +28,8 @@ const Favorites: NextPage = () => {
                 pageName="All Banks"
                 setCity={setCity}
             /> */}
-            <Dashboard />
+            {/* <Dashboard /> */}
+            <h2>hello</h2>
         </>
     )
 }

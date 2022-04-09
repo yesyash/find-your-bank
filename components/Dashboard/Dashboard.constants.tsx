@@ -20,4 +20,5 @@ export const initialState: DashboardState = {
     tableData: [],
     city: cities[0],
     category: categories[0],
+    indexes: { start: 0, end: 5 },
 }

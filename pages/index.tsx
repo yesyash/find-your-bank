@@ -1,3 +1,3 @@
-import Home from '@/components/_pages/Home'
-
-export default Home
+export default function Home() {
+    return <h1>home</h1>
+}

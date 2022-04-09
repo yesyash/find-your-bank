@@ -18,8 +18,11 @@ const Dropdown: React.FC<DropdownProps> = ({
             >
                 <div className="relative">
                     <div className="flex items-center px-3 py-1 transition duration-300 ease-in-out rounded-lg bg-neutral-900 text-neutral-50 hover:bg-neutral-800">
-                        <Listbox.Label className="mr-3">{label}:</Listbox.Label>
                         <Listbox.Button className="flex items-center">
+                            <Listbox.Label className="mr-3 cursor-pointer">
+                                {label}:
+                            </Listbox.Label>
+
                             <span className="block mr-2 truncate">
                                 {selected.value}
                             </span>

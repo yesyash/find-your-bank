@@ -12,12 +12,14 @@ import { useDashboardManager } from './Dashboard.hooks'
 import Pagination from '../Pagination'
 import Dropdown from '../Dropdown'
 import { DropdownData } from '@/types/dropdown'
+import { Search } from 'react-feather'
+import { handleSearch } from './Dashboard.helpers'
 
 const Dashboard = () => {
     const banks = useBank() // can be allowed to be passed by the parent prop
     const addBanks = useAddBanks()
 
-    const { state, updateTable, updateCity, updateCategory } =
+    const { state, updateTable, updateCity, updateCategory, updateIndexes } =
         useDashboardManager(initialState)
     const { data, isLoading } = useGetBanks(state.city.value)
 
@@ -49,7 +51,7 @@ const Dashboard = () => {
 
                     <div>
                         <div className="flex items-center px-4 overflow-hidden border rounded-full border-neutral-400 group focus-within:border-blue-600">
-                            {/* <Search
+                            <Search
                                 width={18}
                                 height={18}
                                 className="transition stroke-neutral-400 group-focus-within:stroke-blue-600"
@@ -64,15 +66,13 @@ const Dashboard = () => {
                                 onChange={(e) =>
                                     handleSearch(
                                         e,
-                                        firstBankIndex,
-                                        lastBankIndex,
-                                        allBanksList,
-                                        defaultTableData,
-                                        setTableData,
-                                        category.value
+                                        state.category.value,
+                                        state.indexes,
+                                        banks,
+                                        updateTable
                                     )
                                 }
-                            /> */}
+                            />
                         </div>
                     </div>
                 </div>
@@ -83,6 +83,7 @@ const Dashboard = () => {
                             <Pagination
                                 allBanks={banks}
                                 updateTableData={updateTable}
+                                updateIndexes={updateIndexes}
                             />
                         </div>
 

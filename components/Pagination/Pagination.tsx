@@ -3,6 +3,7 @@ import { Bank } from '@/types/bank'
 import { DropdownData } from '@/types/dropdown'
 import React from 'react'
 import { ChevronLeft, ChevronRight } from 'react-feather'
+import { DashboardState } from '../Dashboard/Dashboard.types'
 import Dropdown from '../Dropdown'
 
 import { PaginateButton } from './Pagination.subchild'
@@ -10,9 +11,14 @@ import { PaginateButton } from './Pagination.subchild'
 interface Props {
     allBanks: Bank[]
     updateTableData: (banks: Bank[]) => void
+    updateIndexes: (indexes: DashboardState['indexes']) => void
 }
 
-const Pagination: React.FC<Props> = ({ allBanks, updateTableData }) => {
+const Pagination: React.FC<Props> = ({
+    allBanks,
+    updateTableData,
+    updateIndexes,
+}) => {
     const [currentPage, setCurrentPage] = React.useState(1)
     const [postsPerPage, setPostsPerPage] = React.useState(postsCount[0])
 
@@ -44,12 +50,19 @@ const Pagination: React.FC<Props> = ({ allBanks, updateTableData }) => {
     }
 
     React.useEffect(() => {
+        setCurrentPage(1)
+    }, [allBanks])
+
+    React.useEffect(() => {
         updateTableData(allBanks.slice(firstBankIndex, lastBankIndex))
+        updateIndexes({ start: firstBankIndex, end: lastBankIndex })
     }, [postsPerPage, allBanks, currentPage])
+
+    console.log(allBanks)
 
     return (
         <div className="flex items-center">
-            <div className="flex items-center mr-6">
+            <div className="flex items-center mr-6 min-w-[240px]">
                 <PaginateButton onClick={prevPage} disabled={currentPage === 1}>
                     <ChevronLeft />
                 </PaginateButton>

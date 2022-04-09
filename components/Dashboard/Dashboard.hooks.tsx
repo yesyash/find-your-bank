@@ -2,15 +2,15 @@ import React from 'react'
 
 import { Bank } from '@/types/bank'
 
-import { categories, cities } from './Dashboard.constants'
 import { dashboardReducer } from './Dashboard.helpers'
 import { DashboardState } from './Dashboard.types'
 
 interface Res {
     state: DashboardState
     updateTable: (banks: Bank[]) => void
-    updateCity: (city: typeof cities[0]) => void
-    updateCategory: (category: typeof categories[0]) => void
+    updateCity: (city: DashboardState['city']) => void
+    updateCategory: (category: DashboardState['category']) => void
+    updateIndexes: (indexes: DashboardState['indexes']) => void
 }
 
 export const useDashboardManager = (initialState: DashboardState): Res => {
@@ -20,13 +20,20 @@ export const useDashboardManager = (initialState: DashboardState): Res => {
         dispatch({ type: 'updateTableData', banks })
     }, [])
 
-    const updateCity = React.useCallback((city: typeof cities[0]) => {
+    const updateCity = React.useCallback((city: DashboardState['city']) => {
         dispatch({ type: 'updateCity', city })
     }, [])
 
     const updateCategory = React.useCallback(
-        (category: typeof categories[0]) => {
+        (category: DashboardState['category']) => {
             dispatch({ type: 'updateCategory', category })
+        },
+        []
+    )
+
+    const updateIndexes = React.useCallback(
+        (indexes: DashboardState['indexes']) => {
+            dispatch({ type: 'updateIndexes', indexes })
         },
         []
     )
@@ -36,5 +43,6 @@ export const useDashboardManager = (initialState: DashboardState): Res => {
         updateTable,
         updateCity,
         updateCategory,
+        updateIndexes,
     }
 }
