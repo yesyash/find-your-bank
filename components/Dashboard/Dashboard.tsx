@@ -25,7 +25,11 @@ interface Props {
     readonly showFilter?: boolean
 }
 
-const Dashboard: React.FC<Props> = ({ pageName, banks, showFilter }) => {
+const Dashboard: React.FC<Props> = ({
+    pageName = 'All Banks',
+    banks,
+    showFilter,
+}) => {
     const addBanks = useAddBanks()
 
     const { state, updateTable, updateCity, updateCategory, updateIndexes } =
@@ -98,7 +102,7 @@ const Dashboard: React.FC<Props> = ({ pageName, banks, showFilter }) => {
                     <h4>
                         To see working of the proxy api{' '}
                         <a
-                            href="http://localhost:3000/api/bank?city=BANGLORE&ifsc=JAKA0ZOBANG"
+                            href="/api/bank?city=BANGLORE&ifsc=JAKA0ZOBANG"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-block mb-8 text-blue-600 underline"
