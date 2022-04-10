@@ -15,9 +15,14 @@ import { DropdownData } from '@/types/dropdown'
 import { Search } from 'react-feather'
 import { handleSearch } from './Dashboard.helpers'
 import { useDebounce } from '@/hooks/useDebounce'
+import { Bank } from '@/types/bank'
 
-const Dashboard = () => {
-    const banks = useBank() // can be allowed to be passed by the parent prop
+interface Props {
+    pageName: string
+    banks: Bank[]
+}
+
+const Dashboard: React.FC<Props> = ({ pageName, banks }) => {
     const addBanks = useAddBanks()
 
     const { state, updateTable, updateCity, updateCategory, updateIndexes } =
@@ -60,7 +65,7 @@ const Dashboard = () => {
 
             <section className="w-[calc(100vw - 208px)] px-14 py-8 ml-52 ">
                 <div className="flex items-center justify-between pb-4 mb-8">
-                    <h2 className="text-2xl font-bold ">{'pageName'}</h2>
+                    <h2 className="text-2xl font-bold ">{pageName}</h2>
 
                     <div>
                         <div className="flex items-center px-4 overflow-hidden border rounded-full border-neutral-400 group focus-within:border-blue-600">
@@ -81,6 +86,19 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
+
+                <h4>
+                    To see the working of the proxy api{' '}
+                    <a
+                        href="http://localhost:3000/api/bank?city=BANGLORE&ifsc=JAKA0ZOBANG"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mb-8 text-blue-600 underline"
+                    >
+                        Click here
+                    </a>
+                    .
+                </h4>
 
                 <div>
                     <div className="flex items-center my-8">
