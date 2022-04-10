@@ -8,7 +8,6 @@ import { DashboardState } from './Dashboard.types'
 interface Res {
     state: DashboardState
     updateTable: (banks: Bank[]) => void
-    updateCity: (city: DashboardState['city']) => void
     updateCategory: (category: DashboardState['category']) => void
     updateIndexes: (indexes: DashboardState['indexes']) => void
 }
@@ -18,10 +17,6 @@ export const useDashboardManager = (initialState: DashboardState): Res => {
 
     const updateTable = React.useCallback((banks: Bank[]) => {
         dispatch({ type: 'updateTableData', banks })
-    }, [])
-
-    const updateCity = React.useCallback((city: DashboardState['city']) => {
-        dispatch({ type: 'updateCity', city })
     }, [])
 
     const updateCategory = React.useCallback(
@@ -41,7 +36,6 @@ export const useDashboardManager = (initialState: DashboardState): Res => {
     return {
         state,
         updateTable,
-        updateCity,
         updateCategory,
         updateIndexes,
     }

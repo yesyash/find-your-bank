@@ -1,22 +1,26 @@
 import React, { createContext, useCallback, useReducer } from 'react'
 
 import { Bank } from '@/types/bank'
+import { cities } from '@/constants'
 
 interface State {
     banks: Bank[]
     favorites: Bank[]
+    city: typeof cities[0]
 }
 
 type Action =
     | { type: 'AddBanks'; banks: Bank[] }
     | { type: 'ToggleFavorite'; bank: Bank }
+    | { type: 'updateCity'; city: typeof cities[0] }
 
 export type UseGlobalManagerResult = ReturnType<typeof useGlobalManager>
 
 export const GlobalContext = createContext<UseGlobalManagerResult>({
-    state: { banks: [], favorites: [] },
+    state: { banks: [], favorites: [], city: cities[0] },
     addBanks: () => {},
     toggleFavorite: () => {},
+    updateCity: () => {},
 })
 
 function globalReducer(state: State, action: Action): State {
@@ -59,6 +63,10 @@ function globalReducer(state: State, action: Action): State {
                 ),
                 favorites: newFavorites,
             }
+
+        case 'updateCity':
+            return { ...state, city: action.city }
+
         default:
             throw new Error()
     }
@@ -68,6 +76,7 @@ function useGlobalManager(initialState: State): {
     state: State
     addBanks: (banks: Bank[]) => void
     toggleFavorite: (bank: Bank) => void
+    updateCity: (city: typeof cities[0]) => void
 } {
     const [state, dispatch] = useReducer(globalReducer, initialState)
 
@@ -79,7 +88,11 @@ function useGlobalManager(initialState: State): {
         dispatch({ type: 'ToggleFavorite', bank })
     }, [])
 
-    return { state, addBanks, toggleFavorite }
+    const updateCity = useCallback((city: typeof cities[0]) => {
+        dispatch({ type: 'updateCity', city })
+    }, [])
+
+    return { state, addBanks, toggleFavorite, updateCity }
 }
 
 export const GlobalProvider: React.FC<{

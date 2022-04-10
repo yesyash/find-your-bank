@@ -8,7 +8,6 @@ import { DashboardState } from './Dashboard.types'
 type State = DashboardState
 type Action =
     | { type: 'updateTableData'; banks: Bank[] }
-    | { type: 'updateCity'; city: DashboardState['city'] }
     | { type: 'updateCategory'; category: DashboardState['category'] }
     | { type: 'updateIndexes'; indexes: DashboardState['indexes'] }
 
@@ -16,9 +15,6 @@ export const dashboardReducer = (state: State, action: Action): State => {
     switch (action.type) {
         case 'updateTableData':
             return { ...state, tableData: action.banks }
-
-        case 'updateCity':
-            return { ...state, city: action.city }
 
         case 'updateCategory':
             return { ...state, category: action.category }
@@ -30,6 +26,9 @@ export const dashboardReducer = (state: State, action: Action): State => {
     }
 }
 
+/**
+ * Fucntion to handle search input (not debounced)
+ */
 export const handleSearch = (
     e: ChangeEvent<HTMLInputElement>,
     category: string,

@@ -10,14 +10,16 @@ import Dropdown from '@/components/Dropdown'
 import Pagination from '@/components/Pagination'
 
 import { useDebounce } from '@/hooks/useDebounce'
-import { useAddBanks, useBank, useGetBanks } from '@/hooks/useBank'
+import { useAddBanks, useGetBanks } from '@/hooks/useBank'
 
 import { Bank } from '@/types/bank'
 import { DropdownData } from '@/types/dropdown'
 
-import { categories, cities, initialState } from './Dashboard.constants'
+import { categories, initialState } from './Dashboard.constants'
 import { handleSearch } from './Dashboard.helpers'
 import { useDashboardManager } from './Dashboard.hooks'
+import { useCity, useUpdateCity } from '@/hooks/useCity'
+import { cities } from '@/constants'
 
 interface Props {
     pageName: string
@@ -31,18 +33,17 @@ const Dashboard: React.FC<Props> = ({
     showFilter,
 }) => {
     const addBanks = useAddBanks()
+    const city = useCity()
+    const updateCity = useUpdateCity()
 
-    const { state, updateTable, updateCity, updateCategory, updateIndexes } =
+    const { state, updateTable, updateCategory, updateIndexes } =
         useDashboardManager(initialState)
-    const { data, isLoading } = useGetBanks(state.city.value)
+
+    const { data, isLoading } = useGetBanks(city.value)
 
     // Handle dropdown selection
-    function handleDropdown(data: DropdownData, type: string) {
-        if (type.toLowerCase() === 'city') {
-            updateCity(data)
-        } else {
-            updateCategory(data)
-        }
+    function handleDropdown(data: DropdownData) {
+        updateCategory(data)
     }
 
     // swr res
@@ -128,8 +129,8 @@ const Dashboard: React.FC<Props> = ({
                                         <Dropdown
                                             label="City"
                                             data={cities}
-                                            selected={state.city}
-                                            handleSelection={handleDropdown}
+                                            selected={city}
+                                            handleSelection={updateCity}
                                         />
                                     </div>
 
