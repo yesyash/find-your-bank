@@ -58,8 +58,6 @@ const Pagination: React.FC<Props> = ({
         updateIndexes({ start: firstBankIndex, end: lastBankIndex })
     }, [postsPerPage, allBanks, currentPage])
 
-    console.log(allBanks)
-
     return (
         <div className="flex items-center">
             <div className="flex items-center mr-6 min-w-[240px]">

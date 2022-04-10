@@ -10,6 +10,10 @@ interface Props {
 const Table: React.FC<Props> = ({ data }) => {
     const toggleFavorite = useToggleFavorite()
 
+    const handleFav = (bank: Bank) => {
+        toggleFavorite({ ...bank, favorite: !bank.favorite })
+    }
+
     return (
         <table className="w-full overflow-hidden text-sm border-collapse table-fixed">
             <thead className="text-left border-y bg-neutral-100 border-neutral-200">
@@ -47,7 +51,7 @@ const Table: React.FC<Props> = ({ data }) => {
                         <td className="px-2 py-2 lowercase first-letter:capitalize">
                             <button
                                 className="p-1"
-                                onClick={() => toggleFavorite(bank.ifsc)}
+                                onClick={() => handleFav(bank)}
                             >
                                 <Heart
                                     width={18}

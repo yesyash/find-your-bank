@@ -55,7 +55,6 @@ export const handleSearch = (
             if (bankNameList.length === 0) {
                 updateTableData([])
             } else {
-                console.log('inside else')
                 updateTableData(bankNameList.splice(indexes.start, indexes.end))
             }
 

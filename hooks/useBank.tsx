@@ -23,11 +23,15 @@ export const useAddBanks = (): UseGlobalManagerResult['addBanks'] => {
     return addBanks
 }
 
+// Get all banks data realted t oa city using SWR
 export const useGetBanks = (city: string): GetBanksRes => {
     const { data, error } = useSWR(
         `https://vast-shore-74260.herokuapp.com/banks?city=${city.toUpperCase()}`,
         fetcher,
-        { fallbackData: [] }
+        {
+            fallbackData: [],
+            revalidateOnFocus: false,
+        }
     )
 
     let res: GetBanksRes['data'] = data

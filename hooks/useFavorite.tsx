@@ -7,8 +7,7 @@ import { Bank } from '@/types/bank'
 export const useFavorite = (): Bank[] => {
     const { state } = useContext(GlobalContext)
 
-    let favorites = state.banks.filter((bank) => bank.favorite === true)
-    return favorites
+    return state.favorites
 }
 
 export const useToggleFavorite =
