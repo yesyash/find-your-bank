@@ -60,7 +60,7 @@ const Pagination: React.FC<Props> = ({
 
     return (
         <div className="flex items-center">
-            <div className="flex items-center mr-6 min-w-[240px]">
+            <div className="flex items-center mr-6">
                 <PaginateButton onClick={prevPage} disabled={currentPage === 1}>
                     <ChevronLeft />
                 </PaginateButton>

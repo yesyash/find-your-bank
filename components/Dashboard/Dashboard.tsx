@@ -22,9 +22,10 @@ import { useDashboardManager } from './Dashboard.hooks'
 interface Props {
     pageName: string
     banks: Bank[]
+    readonly showFilter?: boolean
 }
 
-const Dashboard: React.FC<Props> = ({ pageName, banks }) => {
+const Dashboard: React.FC<Props> = ({ pageName, banks, showFilter }) => {
     const addBanks = useAddBanks()
 
     const { state, updateTable, updateCity, updateCategory, updateIndexes } =
@@ -117,23 +118,27 @@ const Dashboard: React.FC<Props> = ({ pageName, banks }) => {
                                 />
                             </div>
 
-                            <div className="mr-6">
-                                <Dropdown
-                                    label="City"
-                                    data={cities}
-                                    selected={state.city}
-                                    handleSelection={handleDropdown}
-                                />
-                            </div>
+                            {showFilter && (
+                                <>
+                                    <div className="mr-6">
+                                        <Dropdown
+                                            label="City"
+                                            data={cities}
+                                            selected={state.city}
+                                            handleSelection={handleDropdown}
+                                        />
+                                    </div>
 
-                            <div className="mr-6">
-                                <Dropdown
-                                    label="Category"
-                                    data={categories}
-                                    selected={state.category}
-                                    handleSelection={handleDropdown}
-                                />
-                            </div>
+                                    <div className="mr-6">
+                                        <Dropdown
+                                            label="Category"
+                                            data={categories}
+                                            selected={state.category}
+                                            handleSelection={handleDropdown}
+                                        />
+                                    </div>
+                                </>
+                            )}
                         </div>
 
                         {isLoading ? (
