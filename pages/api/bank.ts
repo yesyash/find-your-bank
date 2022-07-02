@@ -1,19 +1,11 @@
 import { Bank } from '@/types/bank'
 import { NextApiRequest, NextApiResponse } from 'next'
-import fsPromises from 'fs/promises'
+import path from 'path'
+import { promises as fs } from 'fs'
 
 interface IData {
     count: number
-    results: {
-        ifsc: string
-        bank_id: string
-        branch: string
-        address: string
-        city: string
-        district: string
-        state: string
-        bank_name: string
-    }[]
+    results: Omit<Bank, 'favorite'>[]
 }
 
 /**
@@ -27,7 +19,8 @@ export default async function handler(
     res: NextApiResponse
 ) {
     if (req.method === 'GET') {
-        const jsonData = await fsPromises.readFile('./data.json')
+        const jsonDirectory = path.join(process.cwd(), 'json')
+        const jsonData = await fs.readFile(jsonDirectory + '/data.json', 'utf8')
 
         let data: IData = JSON.parse(jsonData.toString())
 

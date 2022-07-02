@@ -4,6 +4,7 @@ export const fetcher = async (url: string) => {
         let res = await fetch(url)
         let data = await res.json()
 
+        console.log(data)
         return data.banks
     } catch (error) {
         return error
