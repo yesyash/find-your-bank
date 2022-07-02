@@ -100,19 +100,6 @@ const Dashboard: React.FC<Props> = ({
                         </div>
                     </div>
 
-                    <h4>
-                        To see working of the proxy api{' '}
-                        <a
-                            href="/api/bank?city=BANGLORE&ifsc=JAKA0ZOBANG"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-block mb-8 text-blue-600 underline"
-                        >
-                            Click here
-                        </a>
-                        .
-                    </h4>
-
                     <div>
                         <div className="flex items-center my-8">
                             <div className="mr-6">
@@ -136,7 +123,7 @@ const Dashboard: React.FC<Props> = ({
 
                                     <div className="mr-6">
                                         <Dropdown
-                                            label="Category"
+                                            label="Filter search by"
                                             data={categories}
                                             selected={state.category}
                                             handleSelection={handleDropdown}

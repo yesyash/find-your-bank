@@ -1,11 +1,25 @@
 import { Bank } from '@/types/bank'
 import { NextApiRequest, NextApiResponse } from 'next'
+import fsPromises from 'fs/promises'
+
+interface IData {
+    count: number
+    results: {
+        ifsc: string
+        bank_id: string
+        branch: string
+        address: string
+        city: string
+        district: string
+        state: string
+        bank_name: string
+    }[]
+}
 
 /**
  * api endpoint: /api/bank?city=<city>&ifsc=<ifsc>
  * -------
- * By default the api will search for ifsc codes in mumbai
- * a city param can be added to the api to search for a specific city
+ * if ifsc is not provided api will return all banks present in the given city.
  * */
 
 export default async function handler(
@@ -13,20 +27,25 @@ export default async function handler(
     res: NextApiResponse
 ) {
     if (req.method === 'GET') {
-        let { city } = req.query
-        city = city ?? 'MUMBAI'
-        let { ifsc } = req.query
-        let ifsCode = ifsc.toString().toLowerCase()
-        let response = await fetch(
-            `https://vast-shore-74260.herokuapp.com/banks?city=${city
-                .toString()
-                .toUpperCase()}`
+        const jsonData = await fsPromises.readFile('./data.json')
+
+        let data: IData = JSON.parse(jsonData.toString())
+
+        let { city, ifsc } = req.query
+        city = city.toString().toLowerCase() ?? 'hyderabad'
+
+        let filteredByCity = data.results.filter(
+            (bank) => bank.city.toLowerCase() === city
         )
-        let banks: Array<Bank> = await response.json()
-        let filteredBanks = banks.filter((bank) => {
-            if (bank.ifsc.toLowerCase().includes(ifsCode)) return bank
-        })
-        res.setHeader('Cache-Control', 'max-age=0, s-maxage=86400')
+
+        let filteredBanks = ifsc
+            ? filteredByCity.filter(
+                  (bank) =>
+                      bank.ifsc.toLowerCase() === ifsc.toString().toLowerCase()
+              )
+            : filteredByCity
+
+        res.setHeader('Cache-control', 'max-age=0, s-maxage=86400')
         res.status(200).json({ banks: filteredBanks })
     }
 }
